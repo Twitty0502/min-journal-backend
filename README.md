@@ -1,4 +1,4 @@
-# min-journal-backend
+# Min Journal Backend
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
