@@ -4,12 +4,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "journal_entries")
 public class JournalEntry {
 
     @Id
@@ -19,6 +25,7 @@ public class JournalEntry {
     private String note;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private Status status;
 
     private LocalDateTime timeStamp;
@@ -54,7 +61,8 @@ public class JournalEntry {
         return timeStamp;
     }
 
-    public void setTimeStamp(LocalDateTime timeStamp) {
-        this.timeStamp = timeStamp;
+    @PrePersist
+    public void setTimestamp() {
+        timeStamp = LocalDateTime.now();
     }
 }
