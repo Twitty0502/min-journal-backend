@@ -13,6 +13,9 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 @Entity
 @Table(name = "journal_entries")
 public class JournalEntry {
@@ -24,6 +27,8 @@ public class JournalEntry {
     private String note;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+
     private Status status;
 
     private LocalDateTime timeStamp;
