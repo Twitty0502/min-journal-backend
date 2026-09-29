@@ -2,6 +2,7 @@ package org.journal.resource;
 
 import org.journal.model.UserDetails;
 import org.journal.repository.UserRepository;
+import org.mindrot.jbcrypt.BCrypt;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -31,6 +32,12 @@ public class UserResource {
                     .build();
         }
 
+        // krypterar lösenordet när man sparar till db
+        String hashedPassword = BCrypt.hashpw(
+                user.getPassword(),
+                BCrypt.gensalt());
+        user.setPassword(hashedPassword);
+
         userRepository.persist(user);
 
         return Response.ok(user).build();
@@ -43,7 +50,8 @@ public class UserResource {
         UserDetails existingUser = userRepository.findByUsername(user.getUsername());
 
         if (existingUser == null ||
-                !existingUser.getPassword().equals(user.getPassword())) {
+                !BCrypt.checkpw(
+                        user.getPassword(), existingUser.getPassword())) {
 
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("Wrong username or password")
