@@ -12,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -70,7 +71,8 @@ public class JournalEntry {
 
     @PrePersist
     public void setTimestamp() {
-        timeStamp = LocalDateTime.now();
+        timeStamp = LocalDateTime.now(
+                ZoneId.of("Europe/Stockholm"));
     }
 
     public UserDetails getUser() {
